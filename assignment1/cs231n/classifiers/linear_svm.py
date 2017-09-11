@@ -95,7 +95,7 @@ def svm_loss_vectorized(W, X, y, reg):
   Inputs and outputs are the same as svm_loss_naive.
   """
   loss1 = 0.0
-  dW1 = np.zeros(W.shape) # initialize the gradient as zero
+  # dW1 = np.zeros(W.shape) # initialize the gradient as zero
 
   #############################################################################
   # TODO:                                                                     #
@@ -103,6 +103,7 @@ def svm_loss_vectorized(W, X, y, reg):
   # result in loss.                                                           #
   #############################################################################
   
+  '''
   scores1 = X.dot(W)        
   num_classes = W.shape[1]
   num_train = X.shape[0]
@@ -125,7 +126,7 @@ def svm_loss_vectorized(W, X, y, reg):
   
   margins[np.arange(num_train), y] = -row_sum1
   dW1 = np.dot(X.T, margins)/num_train + reg * W     # D by C
-  
+  '''
 
 
   loss = 0.0
@@ -134,18 +135,21 @@ def svm_loss_vectorized(W, X, y, reg):
   num_train = X.shape[0]
 
   scores = np.dot(X, W)
+  # print("[{}] shape of X: {}, shape of W: {}, shape of y: {} \
+  #       ".format(__file__, X.shape, W.shape, y.shape))
+  # print("scores shape: {}".format(scores.shape))
   scores -= scores[np.arange(num_train), y].reshape(num_train, 1)
   ones_to_add = np.ones([num_train, num_classes])
   ones_to_add[np.arange(num_train), y] = 0
   scores = scores + ones_to_add
   # print(scores)
   scores_idx = scores > 0
-  print("idx equals: ", (scores_idx== (margins>0) ).all(), sep='\n' )
+  ##### print("idx equals: ", (scores_idx== (margins>0) ).all(), sep='\n' )
   # print(scores_idx.shape, scores_idx[0:20].astype(np.float), sep='\n')
   scores = np.maximum(0, scores)
 
   # print("scores: ", scores[0:10], sep='\n')
-  print("scores equals: ", (scores2==scores).all(), sep='\n' )
+  ####### print("scores equals: ", (scores2==scores).all(), sep='\n' )
   # print("scores: ", scores[0:20], sep='\n')
   # the "+1" is not necessary for the ground truth class, subtracted as follow.
   loss = np.sum(scores) 
@@ -171,10 +175,10 @@ def svm_loss_vectorized(W, X, y, reg):
   row_sum = np.sum(scores_idx, axis=1)                  # 1 by N
   scores_idx = scores_idx.astype(np.int)
   scores_idx[np.arange(num_train), y] = -row_sum
-  print("row_sum equals: ", (row_sum==row_sum1).all(), sep='\n')
-  print("margins equals idx : ", (margins==scores_idx).all(), sep='\n')
-  print("margins: ", margins[0:10], sep='\n')
-  print("idx: ", scores_idx[0:10], sep='\n')
+  #### print("row_sum equals: ", (row_sum==row_sum1).all(), sep='\n')
+  #### print("margins equals idx : ", (margins==scores_idx).all(), sep='\n')
+  #### print("margins: ", margins[0:10], sep='\n')
+  #### print("idx: ", scores_idx[0:10], sep='\n')
   dW = np.dot(X.T, scores_idx)/num_train + reg * W     # D by C
   # pass
   #############################################################################

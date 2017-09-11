@@ -32,6 +32,7 @@ class LinearClassifier(object):
     """
     num_train, dim = X.shape
     num_classes = np.max(y) + 1 # assume y takes values 0...K-1 where K is number of classes
+    # print("[{}]shape of y: {}".format(__file__, y.shape))
     if self.W is None:
       # lazily initialize W
       self.W = 0.001 * np.random.randn(dim, num_classes)
@@ -53,7 +54,12 @@ class LinearClassifier(object):
       # Hint: Use np.random.choice to generate indices. Sampling with         #
       # replacement is faster than sampling without replacement.              #
       #########################################################################
-      pass
+      batch_idx = np.random.choice(np.arange(num_train), size = batch_size)
+      X_batch = X[batch_idx]
+      y_batch = y[batch_idx]
+      # print("[{}] X_batch shape:{}, y_batch shape: {}".\
+      #       format(__file__, X_batch.shape, y_batch.shape))
+      # pass
       #########################################################################
       #                       END OF YOUR CODE                                #
       #########################################################################
@@ -67,7 +73,8 @@ class LinearClassifier(object):
       # TODO:                                                                 #
       # Update the weights using the gradient and the learning rate.          #
       #########################################################################
-      pass
+      self.W += -learning_rate * grad
+      # pass
       #########################################################################
       #                       END OF YOUR CODE                                #
       #########################################################################
@@ -96,7 +103,11 @@ class LinearClassifier(object):
     # TODO:                                                                   #
     # Implement this method. Store the predicted labels in y_pred.            #
     ###########################################################################
-    pass
+    class_scores = np.dot(X, self.W)
+    # print("class_scores shape: {}".format(class_scores.shape))
+    y_pred = np.argmax(class_scores, axis=1) 
+
+    # pass
     ###########################################################################
     #                           END OF YOUR CODE                              #
     ###########################################################################
@@ -124,6 +135,8 @@ class LinearSVM(LinearClassifier):
   """ A subclass that uses the Multiclass SVM loss function """
 
   def loss(self, X_batch, y_batch, reg):
+    # print("[{}] X_batch type: {}, y_batch shape: {}".\
+    #       format(__file__, type(X_batch), y_batch.shape))
     return svm_loss_vectorized(self.W, X_batch, y_batch, reg)
 
 
